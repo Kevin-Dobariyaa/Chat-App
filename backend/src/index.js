@@ -24,7 +24,7 @@ app.use(
 );
 
 app.use("/api/auth", authRouter);
-app.use("/api/message", messageRouter);
+app.use("/api/messages", messageRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is Running on port ${PORT} 🏃🏃🏃🏃🏃🏃🏃🏃🏃`);

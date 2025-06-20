@@ -3,15 +3,20 @@ import { useChatStore } from '../store/useChatStore'
 import SidebarSkeleton from './skeletons/SidebarSkeleton';
 import { Users } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
+import { useState } from 'react';
 
 const Siderbar = () => {
   const {getUsers, users, selectedUser, setSelectedUser, isUserLoading} = useChatStore();
 
   const {onlineUsers} = useAuthStore();
+  const [showOnlineOnly, setShowOnlineOnly] = useState(false);
 
   useEffect(()=>{
     getUsers();
   }, [getUsers]);
+
+  const filteredUsers = showOnlineOnly
+    ? users.filter(user => onlineUsers.includes(user._id)) : users;
 
   if(isUserLoading) return <SidebarSkeleton/>
 
@@ -22,8 +27,8 @@ const Siderbar = () => {
           <Users className="size-6" />
           <span className="font-medium hidden lg:block">Contacts</span>
         </div>
-        {/* TODO: Online filter toggle */}
-        {/* <div className="mt-3 hidden lg:flex items-center gap-2">
+
+        <div className="mt-3 hidden lg:flex items-center gap-2">
           <label className="cursor-pointer flex items-center gap-2">
             <input
               type="checkbox"
@@ -34,11 +39,11 @@ const Siderbar = () => {
             <span className="text-sm">Show online only</span>
           </label>
           <span className="text-xs text-zinc-500">({onlineUsers.length - 1} online)</span>
-        </div> */}
+        </div>
       </div>
 
       <div className="overflow-y-auto w-full py-3">
-        {users.map((user) => (
+        {filteredUsers.map((user) => (
           <button
             key={user._id}
             onClick={() => setSelectedUser(user)}
@@ -52,7 +57,7 @@ const Siderbar = () => {
               <img
                 src={user.profilePic || "/avatar.png"}
                 alt={user.name}
-                className="size-12 object-cover rounded-full"
+                className="size-10 lg:size-12 object-cover rounded-full"
               />
               {onlineUsers.includes(user._id) && (
                 <span
@@ -72,7 +77,7 @@ const Siderbar = () => {
           </button>
         ))}
 
-        {users.length === 0 && (
+        {filteredUsers.length === 0 && (
           <div className="text-center text-zinc-500 py-4">No online users</div>
         )}
       </div>

@@ -15,24 +15,27 @@ import { Toaster } from "react-hot-toast";
 import { useThemeStore } from "./store/useThemeStore";
 
 const App = () => {
-  const { authUser, checkAuth, isCheckingAuth,onlineUsers } = useAuthStore();
-  const {theme} = useThemeStore();
+  const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
+  const { theme } = useThemeStore();
+
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
 
-  console.log({ onlineUsers });
-  
+
   if (isCheckingAuth && !authUser) {
     return (
-      <div className="flex items-center justify-center h-screen" data-theme={theme}>
+      <div
+        className="flex items-center justify-center h-full"
+        data-theme={theme}
+      >
         <Loader className="size-10 animate-spin" />
       </div>
     );
   }
   return (
     <div data-theme={theme}>
-      <Navbar />
+      {authUser && <Navbar />}
 
       <Routes>
         <Route
@@ -54,7 +57,7 @@ const App = () => {
         />
       </Routes>
 
-      <Toaster  />
+      <Toaster />
     </div>
   );
 };

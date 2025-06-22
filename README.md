@@ -2,7 +2,7 @@
 
 A full-stack **real-time chat application** with support for text messaging, image sharing, and 32 unique UI themes!  
 Built using modern technologies like **ReactJS**, **Express**, **MongoDB**, **Cloudinary**, and **Zustand** for state management.  
-Live Demo 👉 [chat-app-k517.onrender.com](https://chattz.up.railway.app/)
+Live Demo 👉 [chatty.com](https://chattz.up.railway.app/)
 
 ---
 

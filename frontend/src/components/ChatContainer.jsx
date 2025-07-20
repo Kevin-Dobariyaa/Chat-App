@@ -6,10 +6,22 @@ import MessageInput from "./MessageInput";
 import MessageSkeleton from "./skeletons/MessageSkeleton";
 import { useAuthStore } from "../store/useAuthStore";
 import { formateTime } from "../lib/utils";
+import { VideoIcon } from "lucide-react";
+
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const ChatContainer = () => {
-  const { messages, getMessages, isMessagesLoading, selectedUser, isMessageSend, subscribeToMessage, unsubscribeFromMessage} =
-    useChatStore();
+  const {
+    messages,
+    getMessages,
+    updateMessage,
+    isMessagesLoading,
+    selectedUser,
+    isMessageSend,
+    subscribeToMessage,
+    unsubscribeFromMessage,
+  } = useChatStore();
   const { authUser } = useAuthStore();
   const bottomRef = useRef(null);
 
@@ -20,12 +32,29 @@ const ChatContainer = () => {
 
     return () => {
       unsubscribeFromMessage();
-    }
-  }, [selectedUser._id, getMessages, unsubscribeFromMessage, subscribeToMessage]);
+    };
+  }, [
+    selectedUser._id,
+    getMessages,
+    unsubscribeFromMessage,
+    subscribeToMessage,
+  ]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [messages, isMessageSend]);
+
+  const navigate = useNavigate();
+  const handleJoinCall = async (message) => {
+    if (message.type !== "video") return;
+    try {
+      navigate(`/video/${message.text}`);
+      toast.success("Joining video call...");
+    } catch (error) {
+      toast.error("Failed to join video call:");
+      console.error("Failed to join video call:", error);
+    }
+  };
 
   if (isMessagesLoading)
     return (
@@ -35,7 +64,6 @@ const ChatContainer = () => {
         <MessageInput />
       </div>
     );
-
   return (
     <div className="flex flex-1 flex-col overflow-auto">
       <ChatHeader />
@@ -60,25 +88,51 @@ const ChatContainer = () => {
                 />
               </div>
             </div>
-
             <div className="chat-header mb-1">
               <time className="text-xs opacity-50 ml-1">
                 {formateTime(message.createdAt)}
               </time>
             </div>
+            {message.type !== "video" && message.type !== "endVideo" && (
 
-            <div className="chat-bubble flex flex-col">
-              {message.image && (
-                <img
-                  src={message.image}
-                  alt="Attachment"
-                  className="sm:max-w-[200px] rounded-md mb-2"
+                <div className="chat-bubble flex flex-col">
+                  {message.image && (
+                    <img
+                      src={message.image}
+                      alt="Attachment"
+                      className="sm:max-w-[200px] rounded-md mb-2"
+                    />
+                  )}
+                  {message.text && <p>{message.text}</p>}
+                </div>
+              
+            )}
+
+            {(message.type === "video" || message.type === "endVideo") && (
+              <div className="chat-bubble flex flex-col">
+              <div
+                className={`flex items-center gap-2 text-md opacity-40 mt-1 border p-2 rounded-md border-primary cursor-pointer ${
+                  message.type == "video" &&
+                  "opacity-60 hover:opacity-80 transition"
+                }`}
+                onClick={() => handleJoinCall(message)}
+              >
+                <span className="text-primary">
+                  {message.type == "video"
+                    ? "Join Video Call"
+                    : "Ended Video Call"}
+                </span>
+                <VideoIcon
+                  size={30}
+                  className="cursor-pointer text-primary"
+                  // Replace with your function
                 />
-              )}
-              {message.text && <p>{message.text}</p>}
+              </div>
             </div>
+            )}
           </div>
         ))}
+
         {/* Skeleton */}
         {isMessageSend && (
           <div className={`chat chat-end`}>

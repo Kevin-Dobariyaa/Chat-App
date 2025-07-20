@@ -18,6 +18,11 @@ const messageSchema = new mongoose.Schema(
     image: {
       type: String,
     },
+    type:{
+      type: String,
+      enum: ["text", "image", "file", "video", "audio","endVideo"],
+      default: "text",
+    }
   },
   { timestamps: true }
 );

@@ -4,21 +4,24 @@ import SidebarSkeleton from './skeletons/SidebarSkeleton';
 import { Users } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
 import { useState } from 'react';
+import { shallow } from "zustand/shallow";
 
 const Siderbar = () => {
   const {getUsers, users, selectedUser, setSelectedUser, isUserLoading} = useChatStore();
 
-  const {onlineUsers} = useAuthStore();
+  const onlineUsers = useAuthStore(state => state.onlineUsers, shallow);
+
   const [showOnlineOnly, setShowOnlineOnly] = useState(false);
 
   useEffect(()=>{
     getUsers();
-  }, [getUsers]);
+    // onlineUsers;
+  }, [getUsers,onlineUsers]);
 
+  
+  if(isUserLoading) return <SidebarSkeleton/>
   const filteredUsers = showOnlineOnly
     ? users.filter(user => onlineUsers.includes(user._id)) : users;
-
-  if(isUserLoading) return <SidebarSkeleton/>
 
   return (
     <aside className="h-full w-20 lg:w-72 border-r border-base-300 flex flex-col transition-all duration-200">
@@ -38,7 +41,7 @@ const Siderbar = () => {
             />
             <span className="text-sm">Show online only</span>
           </label>
-          <span className="text-xs text-zinc-500">({onlineUsers.length - 1} online)</span>
+          <span className="text-xs text-zinc-500">({Math.max(0, onlineUsers.length - 1)} online)</span>
         </div>
       </div>
 

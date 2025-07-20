@@ -13,6 +13,9 @@ import { useEffect } from "react";
 import { Loader } from "lucide-react";
 import { Toaster } from "react-hot-toast";
 import { useThemeStore } from "./store/useThemeStore";
+import CallPage from "./pages/CallPage";
+
+
 
 const App = () => {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
@@ -21,6 +24,7 @@ const App = () => {
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
+
 
 
   if (isCheckingAuth && !authUser) {
@@ -54,6 +58,10 @@ const App = () => {
         <Route
           path="/profile"
           element={authUser ? <ProfilePage /> : <Navigate to="/login" />}
+        />
+        <Route 
+          path="/video/:id"
+          element={authUser ? <CallPage/>: <Navigate to="/login" />}
         />
       </Routes>
 

@@ -28,7 +28,7 @@ export const signup = async (req, res) => {
     const newUser = new User({ name, email, password: hashedPassword });
 
     if (newUser) {
-      generateToken(newUser._id, res);
+      const token = generateToken(newUser._id, res);
       await newUser.save();
 
       res.status(201).json({
@@ -36,6 +36,7 @@ export const signup = async (req, res) => {
         name: newUser.name,
         email: newUser.email,
         profilePic: newUser.profilePic,
+        token,
       });
     } else {
       res.status(400).json({ message: "Invalid user data" });
@@ -66,13 +67,14 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    generateToken(user._id, res);
+    const token = generateToken(user._id, res);
 
     res.status(200).json({
       _id: user._id,
       name: user.name,
       email: user.email,
       profilePic: user.profilePic,
+      token,
     });
   } catch (err) {
     console.log("Error in login controller:", err);
@@ -120,7 +122,9 @@ export const updateProfile = async (req, res) => {
 
 export const checkAuth = (req, res) => {
   try {
-    res.status(200).json(req.user);
+    console.log(req.user);
+    const token = req.cookies.jwt;
+    res.status(200).json(req.user,token);
   } catch (err) {
     console.log("Error in checkAuth controller:", err);
     res.status(500).json({ message: "Internal server error" });

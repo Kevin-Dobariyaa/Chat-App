@@ -8,6 +8,7 @@ import { connectDB } from "./lib/db.js";
 
 import authRouter from "./routes/auth.route.js";
 import messageRouter from "./routes/message.route.js";
+import videoRoute from "./routes/video.route.js";
 import { app, server } from "./lib/socket.js";
 
 dotenv.config();
@@ -26,6 +27,7 @@ app.use(
 
 app.use("/api/auth", authRouter);
 app.use("/api/messages", messageRouter);
+app.use("/api/video", videoRoute);
 
 if(process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));

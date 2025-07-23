@@ -23,7 +23,7 @@ app.use(express.urlencoded({ extended: true, limit: "1000mb" }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: (NODE_ENV == "developement" ? "http://localhost:5173" : "https://chatty-chat-me.vercel.app"),
+    origin: (NODE_ENV == "development" ? "http://localhost:5173" : "https://chatty-chat-me.vercel.app"),
     credentials: true,
   })
 );

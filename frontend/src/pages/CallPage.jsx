@@ -39,7 +39,7 @@ const CallPage = () => {
         
         const [id1,id2] = callId.split("-");
         if (joined){
-          toast.error("You have already joined this call.");
+          // toast.error("You have already joined this call.");
           return;
         }
         if (id1 !== authUser._id && id2 !== authUser._id) {

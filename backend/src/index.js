@@ -14,6 +14,7 @@ import { app, server } from "./lib/socket.js";
 dotenv.config();
 
 const PORT = process.env.PORT;
+const NODE_ENV = process.env.NODE_ENV || "production";
 const __dirname = path.resolve();
 
 // app.use(express.json());
@@ -22,7 +23,7 @@ app.use(express.urlencoded({ extended: true, limit: "1000mb" }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: (NODE_ENV == "developement" ? "http://localhost:5173" : "https://chatty-chat-me.vercel.app/"),
     credentials: true,
   })
 );

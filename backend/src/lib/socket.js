@@ -1,13 +1,18 @@
 import { Server } from "socket.io";
 import http from "http";
 import express from "express";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
+const NODE_ENV = process.env.NODE_ENV || "production";
 
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
+    // origin: "http://localhost:5173",
+    origin: (NODE_ENV == "developement" ? "http://localhost:5173" : "https://chatty-chat-me.vercel.app/"),
   },
 });
 

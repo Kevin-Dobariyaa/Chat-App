@@ -41,7 +41,6 @@ export const useChatStore = create((set,get)=>({
         let response;
         try{
             response = await axiosInstance.post(`/messages/send/${selectedUser._id}`, messageData);
-            set({messages: [...messages, response.data]});
         }catch (err) {
             toast.error('Image size should be less than 1MB');
         }finally{

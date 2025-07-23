@@ -10,18 +10,19 @@ const Siderbar = () => {
   const {getUsers, users, selectedUser, setSelectedUser, isUserLoading} = useChatStore();
 
   const onlineUsers = useAuthStore(state => state.onlineUsers, shallow);
-
+  const filteredUsers = showOnlineOnly
+    ? users.filter(user => onlineUsers.includes(user._id)) : users;
+  
   const [showOnlineOnly, setShowOnlineOnly] = useState(false);
-
+  
   useEffect(()=>{
     getUsers();
     // onlineUsers;
-  }, [getUsers,onlineUsers]);
+    console.log("Online Users:", filteredUsers);
+  }, [getUsers,filteredUsers]);
 
   
   if(isUserLoading) return <SidebarSkeleton/>
-  const filteredUsers = showOnlineOnly
-    ? users.filter(user => onlineUsers.includes(user._id)) : users;
 
   return (
     <aside className="h-full w-20 lg:w-72 border-r border-base-300 flex flex-col transition-all duration-200">

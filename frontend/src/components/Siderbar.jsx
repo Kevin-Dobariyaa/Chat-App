@@ -15,8 +15,7 @@ const Siderbar = () => {
 
   useEffect(()=>{
     getUsers();
-    // onlineUsers;
-  }, [getUsers,onlineUsers]);
+  }, [getUsers]);
 
   
   if(isUserLoading) return <SidebarSkeleton/>

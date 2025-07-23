@@ -26,7 +26,7 @@ const MessageInput = () => {
 
     const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreview(reader.result); // base64 string (used in sendMessage)
+        setImagePreview(reader.result); 
       };
       reader.readAsDataURL(compressedFile);
     } catch (error) {

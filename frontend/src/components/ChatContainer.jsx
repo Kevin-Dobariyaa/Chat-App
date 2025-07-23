@@ -125,7 +125,6 @@ const ChatContainer = () => {
                 <VideoIcon
                   size={30}
                   className="cursor-pointer text-primary"
-                  // Replace with your function
                 />
               </div>
             </div>
